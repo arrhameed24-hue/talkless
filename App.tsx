@@ -5,8 +5,9 @@ import { Header } from './components/Header';
 import { TrackerControls } from './components/TrackerControls';
 import { DailySummary } from './components/DailySummary';
 import { GeminiInsights } from './components/GeminiInsights';
+import { DataManagement } from './components/DataManagement';
 import { Icon, LogOut, BrainCircuit } from './components/Icons';
-import type { TalkRecord, DailyStat } from './types';
+import type { TalkRecord, DailyStat, AppData } from './types';
 import { getDailyStats, getWeeklyStats, getMonthlyStats } from './services/statsService';
 
 const App: React.FC = () => {
@@ -53,6 +54,11 @@ const App: React.FC = () => {
 
   const toggleTimer = () => {
     setIsTimerActive(prev => !prev);
+  };
+
+  const handleDataImport = (data: AppData) => {
+    setTalkRecords(data.talkRecords);
+    setTalklessTime(data.talklessTime);
   };
 
   const dailyStats = useMemo(() => getDailyStats(talkRecords, talklessTime), [talkRecords, talklessTime]);
@@ -124,6 +130,10 @@ const App: React.FC = () => {
                 Tracking unwanted talk isn't about silence, it's about mindfulness. It helps you understand your communication patterns, reduce impulsive speech, and become a more intentional listener.
                </p>
             </div>
+            <DataManagement
+              data={{ talkRecords, talklessTime }}
+              onImport={handleDataImport}
+            />
           </div>
         </div>
       </main>

@@ -14,3 +14,8 @@ export interface GeminiInsight {
   insight: string;
   suggestions: string[];
 }
+
+export interface AppData {
+  talkRecords: TalkRecord[];
+  talklessTime: number;
+}

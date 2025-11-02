@@ -60,7 +60,7 @@ export const GeminiInsights: React.FC<GeminiInsightsProps> = ({ records }) => {
 
             Analyze this data to identify patterns (e.g., time of day, clusters).
             Provide a concise, encouraging title, a short paragraph of insight, and a bulleted list of 2-3 simple, actionable suggestions.
-            Your entire response MUST be a single, valid JSON object with keys "title", "insight", and "suggestions" (an array of strings). Do not add any markdown formatting like \`\`\`json.
+            The output must conform to the provided JSON schema.
         `;
         
         const response = await ai.models.generateContent({
@@ -68,6 +68,18 @@ export const GeminiInsights: React.FC<GeminiInsightsProps> = ({ records }) => {
             contents: prompt,
             config: {
                 responseMimeType: "application/json",
+                responseSchema: {
+                    type: Type.OBJECT,
+                    properties: {
+                        title: { type: Type.STRING },
+                        insight: { type: Type.STRING },
+                        suggestions: {
+                            type: Type.ARRAY,
+                            items: { type: Type.STRING }
+                        }
+                    },
+                    required: ["title", "insight", "suggestions"]
+                }
             }
         });
 
